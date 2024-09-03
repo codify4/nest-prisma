@@ -12,4 +12,28 @@ export class PostsService {
             userId,
         } })
     }
+
+    async createGroupPost(
+        userIds: number[], 
+        data: Prisma.GroupPostCreateWithoutUsersInput
+    ) {
+        return this.prisma.groupPost.create({ data: {
+            ...data,
+            users: {
+                create: userIds.map(userId => ({ userId })),
+            },
+        } })
+    }
+
+    async getGroupPosts() {
+        return this.prisma.groupPost.findMany({
+            include: {
+                users: {
+                    select: {
+                        user: true,
+                    },
+                },
+            },
+        })
+    }
 }

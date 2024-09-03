@@ -14,11 +14,28 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  username    String       @unique
-  displayName String?      @default("")
+  id          Int                @id @default(autoincrement())
+  username    String             @unique
+  displayName String?            @default("")
   userSetting UserSetting?
   posts       Post[]
+  groupPosts  UserOnGroupPosts[]
+}
+
+model GroupPost {
+  id          Int                @id @default(autoincrement())
+  title       String
+  description String
+  users       UserOnGroupPosts[]
+}
+
+model UserOnGroupPosts {
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  groupPost   GroupPost @relation(fields: [groupPostId], references: [id])
+  groupPostId Int
+
+  @@id([userId, groupPostId])
 }
 
 model UserSetting {
