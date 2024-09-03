@@ -38,6 +38,12 @@ export class UsersService {
         })
     }
 
+    async getUserByUsername(username: string) {
+        return this.prisma.user.findUnique({
+            where: { username },
+        })
+    }
+
     async updateUserById(id: number, data: Prisma.UserUpdateInput) {
         const findUser = await this.getUserById(id);
         if(!findUser) throw new HttpException('User not found', 404);
